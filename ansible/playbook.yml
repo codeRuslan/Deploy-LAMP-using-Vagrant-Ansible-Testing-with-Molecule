@@ -1,0 +1,24 @@
+---
+- name: LAMP init
+  hosts: mngm
+  become: true
+  gather_facts: true
+
+  roles:
+    - nginx
+    - php
+    - mysql
+
+  tasks:
+    - name: Restart php-fpm restarted
+      ansible.builtin.service:
+        name: php7.4-fpm
+        state: restarted
+    - name: Service nginx restarted
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+    - name: Service MySQL restarted
+      ansible.builtin.service:
+        name: mysql
+        state: restarted

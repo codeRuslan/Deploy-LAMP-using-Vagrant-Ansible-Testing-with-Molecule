@@ -1,0 +1,39 @@
+---
+- name: Import epel repo key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+
+- name: Install epel repo
+  ansible.builtin.yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    state: present
+
+- name: Installing nginx
+  ansible.builtin.yum:
+    name: nginx-1.14.1
+    state: present
+    update_cache: true
+
+- name: Enable NGINX service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Delete /var/www/html
+  ansible.builtin.file:
+    path: "/usr/share/nginx/html"
+    state: "absent"
+
+- name: Copy default index.html
+  ansible.builtin.copy:
+    src: "./files/site/"
+    dest: "/usr/share/nginx"
+    mode: "0644"
+
+- name: Replace default conf
+  ansible.builtin.template:
+    src: files/templates/default.centos.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: "0644"

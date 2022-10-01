@@ -1,0 +1,4 @@
+---
+nginx_port: 80
+php_version_centos: "74"
+php_version: "7.4"

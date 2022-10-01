@@ -1,0 +1,23 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: test-docker-centos-8
+    image: quay.io/centos/centos:stream8
+    pre_build_image: true
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tnp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      stdout_callback: debug
+      stderr_callback: debug
+verifier:
+  name: ansible

@@ -1,0 +1,19 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Example assertion
+    ansible.builtin.assert:
+      that: true
+  - name: Nginx - installed
+    ansible.builtin.package:
+      name: nginx
+      state: present
+  - name: Nginx - start and enabled
+    ansible.builtin.service:
+      name: nginx
+      state: started
+      enabled: true

@@ -1,0 +1,13 @@
+---
+mysql_packages_ubuntu:
+  - mysql-server
+  - mysql-common
+  - python3-pymysql
+  - python3-mysqldb
+
+packages_centos:
+  - mysql-server
+  - mysql-common
+  - python3-PyMySQL
+
+mysql_root_password: password2

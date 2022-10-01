@@ -1,0 +1,37 @@
+---
+- name: Import remi repo key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+
+- name: Install remi repo
+  ansible.builtin.yum:
+    name: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+    state: present
+
+- name: Installation of php
+  ansible.builtin.yum:
+    name: "{{ php_packages_centos }}"
+    state: present
+
+- name: Enabled php-fpm
+  ansible.builtin.service:
+    name: php{{ php_version_centos }}-php-fpm
+    enabled: true
+
+- name: Delete default php
+  ansible.builtin.file:
+    path: "/etc/php-fpm.d/php-fpm.conf"
+    state: "absent"
+
+- name: Copy php-fpm 
+  ansible.builtin.copy:
+    src: files/templates/php-fpm.centos.conf.j2
+    dest: /etc/opt/remi/php74/php-fpm.conf
+    mode: "0644"
+
+# - name: Check for php
+#   shell: "service php74-php-fpm status"
+#   register: _svc_php
+#   failed_when: >
+#     _svc_php.rc != 0 and ("unrecognized service" not in _svc_php.stderr)

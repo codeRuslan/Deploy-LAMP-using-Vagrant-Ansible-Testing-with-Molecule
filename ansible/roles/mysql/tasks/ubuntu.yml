@@ -1,0 +1,35 @@
+---
+- name: Installing MySQL Packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+    allow_downgrade: true
+    autoremove: true
+  with_items:
+    - "python3-pymysql"
+    - "python3-mysqldb"
+    - "mysql-common"
+    - "mysql-server"
+
+- name: Start MySQL Server
+  ansible.builtin.service:
+    name: "mysql"
+    state: "started"
+    enabled: true
+
+- name: Set root user
+  community.mysql.mysql_user:
+    name: "root"
+    password: "password"
+    login_user: "root"
+    login_password: "password"
+    check_implicit_admin: true
+    login_unix_socket: "/var/run/mysqld/mysqld.sock"
+
+- name: Remove anonymous users
+  community.mysql.mysql_user:
+    name: ""
+    state: "absent"
+    login_user: "root"
+    login_password: "password"

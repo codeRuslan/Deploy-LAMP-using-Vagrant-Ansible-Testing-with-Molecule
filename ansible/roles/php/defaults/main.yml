@@ -1,0 +1,12 @@
+---
+php_version_centos: "74"  # format for centos 7.4 - 74
+php_version_ubuntu: "7.4"
+php_version: "74"
+php_packages_centos:
+  - php{{ php_version_centos }}
+  - php{{ php_version_centos }}-php-fpm
+  - php{{ php_version_centos }}-php-cli
+php_packages_ubuntu:
+  - php{{ php_version_ubuntu }}
+  - php{{ php_version_ubuntu }}-fpm
+  - php{{ php_version_ubuntu }}-cli

@@ -1,0 +1,35 @@
+---
+- name: Installing MySQL and Python3 packages
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mysql-server
+    - mysql
+    - mysql-common
+    #- python3-mysqldb
+
+- name: Start MySQL Server
+  ansible.builtin.service:
+    name: "mysqld"
+    state: "started"
+    enabled: true
+
+- name: "Set root user"
+  community.mysql.mysql_user:
+    name: "root"
+    password: "password"
+    login_user: "root"
+    login_password: ""
+    check_implicit_admin: true
+
+- name: Ensure root user can only login from localhost
+  community.mysql.mysql_user:
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: true
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+    state: present
+  with_items:
+    - localhost
